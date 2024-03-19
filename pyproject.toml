@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "foogle"
+version = "0.1.0"
+description = "Educational project for UrFU Python class"
+authors = ["Daniil Semenov <49916703+sicutglacies@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+nltk = "^3.8.1"
+rank-bm25 = "^0.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
