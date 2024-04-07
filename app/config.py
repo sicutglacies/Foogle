@@ -3,7 +3,7 @@ from pathlib import Path
 
 class Config:
     # Loader config
-    ALLOWED_FILES_FORMAT = {'.txt', '.doc', '.docx', '.pdf'}
+    ALLOWED_FILES_FORMAT = {'.txt', '.doc', '.docx', '.pdf', ".csv", '.rtf', '.rst', '.tsv', '.ppt', '.pptx', ".xlsx", '.epub', '.md'}
     TEXT_LOADER_KWARGS = {'autodetect_encoding': True}
 
     # Splitter config
@@ -14,7 +14,7 @@ class Config:
     K_TO_RETRIEVE = 3
 
     # Files path
-    FILES_PATH: Path = Path('/Users/sicutglacies/Desktop/search')
+    FILES_PATH: Path = Path('data')
 
 
 config = Config()

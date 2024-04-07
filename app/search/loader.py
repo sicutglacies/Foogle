@@ -1,7 +1,6 @@
 from typing import List
 from pathlib import Path
 
-import streamlit as st
 from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter

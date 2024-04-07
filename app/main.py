@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 from langchain.retrievers.bm25 import default_preprocessing_func
 
@@ -13,6 +15,10 @@ st.header("Поисковик по каталогу")
 
 
 filenames = get_filenames(config.FILES_PATH)
+if len(filenames) == 0:
+    st.header('No files in the provided directory. Rerunning in 2 sec')
+    time.sleep(2)
+    st.rerun()
 retriever = setup_retriever(filenames)
 
 

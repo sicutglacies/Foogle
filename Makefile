@@ -1,12 +1,10 @@
+.PHONY: run build format lint
+
 run:
-	streamlit run app/main.py
+	docker-compose up
 
-gen_reqs:
-	poetry export --without-hashes --without-urls | awk '{ print $1 }' FS=';' > requirements.txt
-
-install:
-	poetry install
-	python -m nltk.downloader punkt
+build:
+	docker-compose build
 
 format:
 	ruff check --fix
