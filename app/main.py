@@ -1,29 +1,23 @@
-from pathlib import Path
-from loader.loader import load_files, split_files
-from loader.preprocess import to_lowercase, remove_punctuation
-from search.engine import Searcher
+from langchain_community.retrievers import BM25Retriever
+from langchain.retrievers.bm25 import default_preprocessing_func
+
+from loader.loader import load_files, split_docs
+from config import config
 
 
-N_SENT_TO_RETRIEVE = 3
-TXT_DIR = Path('/Users/sicutglacies/Documents/University/python/Foogle/data')
+docs = load_files(config.FILES_PATH)
+splits = split_docs(docs)
 
-docs = load_files(TXT_DIR)
-docs_sentences = split_files(docs)
-
-
-tk_corpus = to_lowercase(docs_sentences)
-tk_corpus = remove_punctuation(tk_corpus)
-
-searcher = Searcher(docs_sentences, tk_corpus)
+retriever = BM25Retriever.from_documents(splits)
+retriever.k = config.K_TO_RETRIEVE
 
 
 if __name__ == "__main__":
+    print("Ready to work")
     while True:
-        query = input("Enter your search query: ").lower().split(" ")
-        resutls = searcher.make_search(query, N_SENT_TO_RETRIEVE)
-        scores = sorted(searcher.bm25.get_scores(query))[::-1][:N_SENT_TO_RETRIEVE]
-        for n, (res, score) in enumerate(zip(resutls, scores)):
-            print(f'{n+1}. /{round(score, 2)}/ {res}')
-    
-    
-    
+        query = input("Enter your search query: ")
+        results = retriever.get_relevant_documents(query)
+        scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(query)))[::-1][:config.K_TO_RETRIEVE]
+        for n, (res, score) in enumerate(zip(results, scores)):
+            print(n, score, res.page_content)
+            print('-' * 50)

@@ -6,6 +6,7 @@ gen_reqs:
 
 install:
 	poetry install
+	python -m nltk.downloader punkt
 
 format:
 	ruff check --fix
