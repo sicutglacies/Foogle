@@ -1,7 +1,7 @@
 .PHONY: run build format lint
 
 run:
-	docker-compose up
+	docker-compose up -d
 
 build:
 	docker-compose build
