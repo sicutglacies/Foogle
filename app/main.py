@@ -1,23 +1,41 @@
-from langchain_community.retrievers import BM25Retriever
+import streamlit as st
 from langchain.retrievers.bm25 import default_preprocessing_func
 
-from loader.loader import load_files, split_docs
+from search.loader import get_filenames
+from search.retriever import setup_retriever
+from web.generator import response_generator
 from config import config
 
 
-docs = load_files(config.FILES_PATH)
-splits = split_docs(docs)
-
-retriever = BM25Retriever.from_documents(splits)
-retriever.k = config.K_TO_RETRIEVE
+st.set_page_config(page_title="Search")
+st.title("BM25 Search")
+st.header("Поисковик по каталогу")
 
 
-if __name__ == "__main__":
-    print("Ready to work")
-    while True:
-        query = input("Enter your search query: ")
+filenames = get_filenames(config.FILES_PATH)
+retriever = setup_retriever(filenames)
+
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("Задайте Ваш вопрос"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("assistant"):
+        query = st.session_state.messages[-1]['content']
         results = retriever.get_relevant_documents(query)
         scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(query)))[::-1][:config.K_TO_RETRIEVE]
-        for n, (res, score) in enumerate(zip(results, scores)):
-            print(n, score, res.page_content)
-            print('-' * 50)
+
+        response = st.write_stream(response_generator(scores, results))
+
+    st.session_state.messages.append({"role": "assistant", "content": response})
+        

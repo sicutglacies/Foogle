@@ -1,20 +1,20 @@
-import sys
-sys.path.append("..")
-
 from typing import List
 from pathlib import Path
 
+import streamlit as st
 from langchain_community.document_loaders import UnstructuredFileLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from unstructured.cleaners.core import clean_extra_whitespace, clean_non_ascii_chars
+from unstructured.cleaners.core import clean_extra_whitespace
 
 from config import config
 
 
-def load_files(path: Path) -> List[Document]:
-    files = list(p.resolve() for p in Path(path).glob("**/*") if p.suffix in config.ALLOWED_FILES_FORMAT)
+def get_filenames(path: Path):
+    return list(p.resolve() for p in Path(path).glob("**/*") if p.suffix in config.ALLOWED_FILES_FORMAT)
 
+
+def load_files(files: List[Path]) -> List[Document]:
     loader = UnstructuredFileLoader(
         files,
         loader_kwargs=config.TEXT_LOADER_KWARGS,

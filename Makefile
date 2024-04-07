@@ -1,5 +1,5 @@
 run:
-	python app/main.py
+	streamlit run app/main.py
 
 gen_reqs:
 	poetry export --without-hashes --without-urls | awk '{ print $1 }' FS=';' > requirements.txt
