@@ -35,7 +35,6 @@ if prompt := st.chat_input("Задайте Ваш вопрос"):
 
     with st.chat_message("user"):
         st.markdown(prompt)
-    st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.chat_message("assistant"):
         query = st.session_state.messages[-1]['content']

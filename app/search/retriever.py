@@ -9,7 +9,7 @@ from search.preprocess import preprocess_text
 from config import config
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner = False)
 def setup_retriever(filenames):
     docs = load_files(filenames)
     splits = split_docs(docs)
