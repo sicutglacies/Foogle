@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: foogle
+    command: ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    volumes:
+      - /Users/sicutglacies/Desktop/search:/code/data
+    ports:
+      - 8501:8501
+    deploy:
+      resources:
+        limits:
+          cpus: "8.0"
+          memory: "4G"
+
+volumes:
+  app:
+    name: search

@@ -1,29 +1,47 @@
-from pathlib import Path
-from loader.loader import load_files, split_files
-from loader.preprocess import to_lowercase, remove_punctuation
-from search.engine import Searcher
+import time
+
+import streamlit as st
+from langchain.retrievers.bm25 import default_preprocessing_func
+
+from src.search.loader import get_filenames
+from src.search.retriever import setup_retriever
+from src.search.preprocess import preprocess_text
+from src.web.generator import response_generator
+from src.config import config
 
 
-N_SENT_TO_RETRIEVE = 3
-TXT_DIR = Path('/Users/sicutglacies/Documents/University/python/Foogle/data')
-
-docs = load_files(TXT_DIR)
-docs_sentences = split_files(docs)
+st.set_page_config(page_title="Search")
+st.title("Foogle")
+st.header("Поисковик по каталогу")
 
 
-tk_corpus = to_lowercase(docs_sentences)
-tk_corpus = remove_punctuation(tk_corpus)
+filenames = get_filenames(config.FILES_PATH)
+if len(filenames) == 0:
+    st.header('No files in the provided directory. Rerunning in 2 sec')
+    time.sleep(2)
+    st.rerun()
+retriever = setup_retriever(filenames)
 
-searcher = Searcher(docs_sentences, tk_corpus)
 
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-if __name__ == "__main__":
-    while True:
-        query = input("Enter your search query: ").lower().split(" ")
-        resutls = searcher.make_search(query, N_SENT_TO_RETRIEVE)
-        scores = sorted(searcher.bm25.get_scores(query))[::-1][:N_SENT_TO_RETRIEVE]
-        for n, (res, score) in enumerate(zip(resutls, scores)):
-            print(f'{n+1}. /{round(score, 2)}/ {res}')
-    
-    
-    
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("Задайте Ваш вопрос"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        query = st.session_state.messages[-1]['content']
+        results = retriever.get_relevant_documents(preprocess_text(query))
+        scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(preprocess_text(query))))[::-1][:config.K_TO_RETRIEVE]
+
+        response = st.write_stream(response_generator(query, scores, results))
+
+    st.session_state.messages.append({"role": "assistant", "content": response})
+        

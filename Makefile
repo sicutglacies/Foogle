@@ -1,11 +1,13 @@
+.PHONY: run build stop format lint
+
 run:
-	python app/main.py
+	docker-compose up -d
 
-gen_reqs:
-	poetry export --without-hashes --without-urls | awk '{ print $1 }' FS=';' > requirements.txt
+build:
+	docker-compose build
 
-install:
-	poetry install
+stop:
+	docker-compose down
 
 format:
 	ruff check --fix
