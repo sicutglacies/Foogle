@@ -7,7 +7,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from unstructured.cleaners.core import clean_extra_whitespace
 
-from config import config
+from src.config import config
 
 
 def get_filenames(path: Path):

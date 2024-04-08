@@ -3,11 +3,11 @@ import time
 import streamlit as st
 from langchain.retrievers.bm25 import default_preprocessing_func
 
-from search.loader import get_filenames
-from search.retriever import setup_retriever
-from search.preprocess import preprocess_text
-from web.generator import response_generator
-from config import config
+from src.search.loader import get_filenames
+from src.search.retriever import setup_retriever
+from src.search.preprocess import preprocess_text
+from src.web.generator import response_generator
+from src.config import config
 
 
 st.set_page_config(page_title="Search")
@@ -41,7 +41,7 @@ if prompt := st.chat_input("Задайте Ваш вопрос"):
         results = retriever.get_relevant_documents(preprocess_text(query))
         scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(preprocess_text(query))))[::-1][:config.K_TO_RETRIEVE]
 
-        response = st.write_stream(response_generator(scores, results))
+        response = st.write_stream(response_generator(query, scores, results))
 
     st.session_state.messages.append({"role": "assistant", "content": response})
         

@@ -1,12 +1,9 @@
-import sys
-sys.path.append("..")
-
 import streamlit as st
 from langchain_community.retrievers import BM25Retriever
 
-from search.loader import load_files, split_docs
-from search.preprocess import preprocess_text
-from config import config
+from src.search.loader import load_files, split_docs
+from src.search.preprocess import preprocess_text
+from src.config import config
 
 
 @st.cache_resource(show_spinner = False)
