@@ -19,4 +19,6 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+RUN python -m nltk.downloader stopwords
+
 COPY app ./app

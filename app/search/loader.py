@@ -14,13 +14,18 @@ def get_filenames(path: Path):
 
 
 def load_files(files: List[Path]) -> List[Document]:
-    loader = UnstructuredFileLoader(
-        files,
-        loader_kwargs=config.TEXT_LOADER_KWARGS,
-        post_processors=[clean_extra_whitespace])
-    docs = loader.load()
+    documents = []
+    for filepath in files:
+        loader = UnstructuredFileLoader(
+            file_path=filepath,
+            strategy='hi_res',
+            mode='elements',
+            loader_kwargs=config.TEXT_LOADER_KWARGS,
+            post_processors=[clean_extra_whitespace])
+        docs = loader.load()
+        documents.extend(docs)
 
-    return docs
+    return documents
 
 
 def split_docs(docs: List[Document]) -> List[Document]:

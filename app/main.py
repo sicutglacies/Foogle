@@ -5,12 +5,13 @@ from langchain.retrievers.bm25 import default_preprocessing_func
 
 from search.loader import get_filenames
 from search.retriever import setup_retriever
+from search.preprocess import preprocess_text
 from web.generator import response_generator
 from config import config
 
 
 st.set_page_config(page_title="Search")
-st.title("BM25 Search")
+st.title("Foogle")
 st.header("Поисковик по каталогу")
 
 
@@ -38,8 +39,8 @@ if prompt := st.chat_input("Задайте Ваш вопрос"):
 
     with st.chat_message("assistant"):
         query = st.session_state.messages[-1]['content']
-        results = retriever.get_relevant_documents(query)
-        scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(query)))[::-1][:config.K_TO_RETRIEVE]
+        results = retriever.get_relevant_documents(preprocess_text(query))
+        scores = sorted(retriever.vectorizer.get_scores(default_preprocessing_func(preprocess_text(query))))[::-1][:config.K_TO_RETRIEVE]
 
         response = st.write_stream(response_generator(scores, results))
 
