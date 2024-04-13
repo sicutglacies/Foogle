@@ -17,5 +17,8 @@ class Config:
     # Files path
     FILES_PATH: Path = Path('data')
 
+    # PDF loading strategy
+    PDF_STRATEGY: str = 'fast' # change to hi_res for image-based pdfs
+
 
 config = Config()
