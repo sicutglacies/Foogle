@@ -11,7 +11,8 @@ class Config:
     CHUNK_OVERLAP: int = 200
 
     # Retriever parameters
-    K_TO_RETRIEVE = 10
+    K_TO_RETRIEVE: int = 10
+    K_TO_SHOW: int = 5
 
     # Files path
     FILES_PATH: Path = Path('data')

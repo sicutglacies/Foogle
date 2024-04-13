@@ -2,6 +2,7 @@ import time
 from pathlib import PosixPath
 
 from src.search.postprocess import evaluate_query, extension_filter
+from src.config import config
 
 
 def posix_to_string(pos_path: PosixPath) -> str:
@@ -22,6 +23,8 @@ def response_generator(query, scores, responses):
             
             no_answers = False
             n += 1
+            if n == config.K_TO_SHOW:
+                break
 
     if no_answers:
         text += 'No information found'
