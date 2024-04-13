@@ -5,6 +5,8 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 
+from src.config import config
+
 
 stop = set(stopwords.words('english')).union(set(stopwords.words('russian')))
 eng_stemmer = SnowballStemmer("english")
@@ -22,6 +24,8 @@ def stem_words(words):
 def preprocess_text(text):
     # Lowercase the text
     text = text.lower()
+    # Remove masks
+    text = ' '.join([x for x in text.split() if x not in config.ALLOWED_FILES_FORMAT])
     # Remove punctuation
     text = text.translate(str.maketrans('', '', string.punctuation))
     text_without_stop = [x for x in word_tokenize(text) if x not in stop]

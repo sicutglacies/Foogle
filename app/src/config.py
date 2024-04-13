@@ -7,11 +7,11 @@ class Config:
     TEXT_LOADER_KWARGS = {'autodetect_encoding': True}
 
     # Splitter config
-    CHUNK_SIZE: int = 400
-    CHUNK_OVERLAP: int = 50
+    CHUNK_SIZE: int = 1000
+    CHUNK_OVERLAP: int = 200
 
     # Retriever parameters
-    K_TO_RETRIEVE = 5
+    K_TO_RETRIEVE = 10
 
     # Files path
     FILES_PATH: Path = Path('data')
