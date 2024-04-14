@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: foogle
-    command: ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    command: ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0", "--ui.hideSidebarNav", "True"]
     volumes:
       - /Users/sicutglacies/Desktop/search:/code/data
     ports:

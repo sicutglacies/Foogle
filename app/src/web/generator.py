@@ -31,4 +31,4 @@ def response_generator(query, scores, responses):
     
     for char in text:
         yield char
-        time.sleep(0.01)
+        time.sleep(0.005)
