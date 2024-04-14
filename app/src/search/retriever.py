@@ -10,11 +10,12 @@ from src.config import config
 def setup_retriever(filenames):
     docs = load_files(filenames)
     splits = split_docs(docs)
+
     for split in splits:
         split.metadata['original_text'] = split.page_content
         split.page_content = preprocess_text(split.page_content)
 
-    retriever = BM25Retriever.from_documents(splits)
-    retriever.k = config.K_TO_RETRIEVE
+    bm25_retriever = BM25Retriever.from_documents(splits)
+    bm25_retriever.k = config.K_TO_RETRIEVE
 
-    return retriever
+    return bm25_retriever

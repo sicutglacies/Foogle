@@ -24,8 +24,9 @@ def load_files(files: List[Path]) -> List[Document]:
     for n, filepath in enumerate(files):
         loader = UnstructuredFileLoader(
             file_path=filepath,
-            strategy='hi_res',
+            strategy=config.PDF_STRATEGY,
             mode='elements',
+            languages=['eng', 'rus'],
             loader_kwargs=config.TEXT_LOADER_KWARGS,
             post_processors=[clean_extra_whitespace])
         docs = loader.load()
